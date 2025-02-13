@@ -1,0 +1,25 @@
+classes:
+- fields:
+  - description: First possible completion of the field
+    name: alternative_1
+    type: str
+  - description: Salient relevant information present in the input but that is not
+      mentioned in the first alternative
+    name: salient_missing_info
+    type: str
+  - description: Additional facts from the text that were not mentioned in the two previous alternatives
+    name: salient_missing_info_2
+    type: str
+  - description: Second possible completion of the field. It should bring new information
+      or a different perspective from the first alternative, likely incorporating salient_missing_info 1 and 2. It cannot just paraphrase
+      the first alternative.
+    name: alternative_2
+    type: str
+  - description: Final value of the field, combining the information from the previous
+      alternatives to better represent the spirit of the text and meet the field's
+      requirements, without omissions.
+    name: final_decision
+    type: str
+  name: ConsideredCompletion
+name: considered_completion
+output_class: ConsideredCompletion
