@@ -3,7 +3,7 @@ from typing import Optional, Type
 
 from structured_thinking.llm_calls.openai import make_structured_call
 from structured_thinking.structure.schema import class_from_schema, schema_from_class, Schema, FieldSchema
-from structured_thinking.reasoning.reasoning import Template, ReasoningOutput, load_template
+from structured_thinking.reasoning.reasoning import ReasoningOutput, load_template, Template
 
 
 DEFAULT_COMPLETION_TEMPLATE = "considered_completion"
@@ -32,12 +32,6 @@ def completion_call(
     output_schema = schema_from_class(output_class)
     if isinstance(template, str):
         template = load_template(template)
-    if template.descriptions_dict:
-        descriptions_message = (
-            "Consider the following instructions for the output fields:\n"
-            + "\n".join([f"- {field}: {description}" for field, description in template.descriptions_dict.items()])
-        )
-        messages.append({"role": "system", "content": descriptions_message})
     
     thinking_schema = Schema(
         name="Thinking",

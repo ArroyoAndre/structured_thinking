@@ -7,7 +7,7 @@ import yaml
 
 class FieldSchema(BaseModel):
     name: str = Field(description="The name of the field")
-    type: Any = Field(description="The type of the field")
+    type: str = Field(description="The type of the field")
     description: str = Field(description="A description of the field")
 
 
@@ -16,12 +16,15 @@ class Schema(BaseModel):
     fields: list[FieldSchema] = Field(description="The fields of the schema")
 
 
-def class_from_schema(schema: Schema) -> Type[BaseModel]:
-    fields = schema.fields
-    field_definitions = {field.name: Field(description=field.description) for field in fields}
-    field_types = {field.name: field.type for field in fields}
-    field_definitions["__annotations__"] = field_types
-    return type(schema.name, (BaseModel,), field_definitions)
+def class_from_schema(schema: Schema, loaded_classes: list = []) -> Type[BaseModel]:
+    for cls in loaded_classes:
+        globals()[cls.__name__] = cls
+    code = f"class {schema.name}(BaseModel):\n"
+    for field in schema.fields:
+        escaped_description = field.description.replace("'", "\\'")
+        code += f"    {field.name}: {field.type} = Field(description='{escaped_description}')\n"
+    exec(code)
+    return locals()[schema.name]
 
 
 def schema_from_class(cls: Type[BaseModel]) -> Schema:

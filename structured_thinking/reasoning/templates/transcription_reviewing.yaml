@@ -1,0 +1,13 @@
+classes:
+- fields:
+  - description: The corrected complete paragraph, with the fixes applied.
+    name: corrected_paragraph
+    type: str
+  name: CorrectedParagraph
+- fields:
+  - description: List of all paragraphs, reviewed. You might need to infer when to switch to a new paragraph.
+    name: paragraphs
+    type: list[CorrectedParagraph]
+  name: Paragraphs
+name: transcription_reviewing
+output_class: Paragraphs
